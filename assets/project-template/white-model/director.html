@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>白膜导演工作台</title><link rel="stylesheet" href="director.css"></head>
+<body>
+<header><div><span class="brand-mark">◈</span><strong>白膜导演工作台</strong><span class="sub">白膜预演 · 目标状态编辑</span></div><nav><button id="record-observer">第三人称录制</button><button id="record">录制</button><a href="index.html" target="_blank">播放原片 ↗</a><button id="import">导入修改包</button><button id="export" class="primary">下载修改包</button></nav></header>
+<main>
+<section class="stage" aria-label="上帝视角工作区">
+  <div id="viewport"></div>
+  <div id="camera-hud" class="camera-hud">
+    <button id="camera-settings-toggle" class="camera-toggle" aria-label="镜头控制设置" aria-expanded="false" title="镜头控制设置">⚙</button>
+    <div id="camera-settings-panel" class="camera-panel" role="group" aria-label="镜头控制设置" hidden></div>
+  </div>
+  <div class="view-toolbar"><button data-view="overview">全景</button><button data-view="top">俯视</button><button data-view="front">正面</button><button data-view="side">侧面</button><button id="focus">聚焦选中</button></div>
+  <div class="view-options"><label><input id="ceilings" type="checkbox" checked>隐藏天花板</label><label><input id="walls" type="checkbox">隐藏墙体</label><label><input id="ghost" type="checkbox">原位置对照</label><label><input id="labels" type="checkbox" checked>人物编号</label></div>
+  <div class="view-help">左键旋转 · 右键平移 · 滚轮缩放<br>WASD 前后左右 · ↑ 上升 · ↓ 下降 · ← → 原地左右转头 · Shift 按住：3倍移动<br>I 向上看 · K 向下看 · J 镜头逆时针侧倾 · L 顺时针侧倾<br>Delete / 退格 删除选中 · Cmd/Ctrl+Z 撤销</div>
+  <div class="preview"><div class="preview-title"><span id="preview-main">第一人称预览</span><span id="preview-sub">剧情镜头 C01</span></div><div id="preview-canvas"></div><div id="rec-progress" hidden><div class="rec-bar"><i id="rec-bar-fill"></i></div><span id="rec-progress-text"></span></div></div>
+  <div id="status" role="status" aria-live="polite">正在载入场景…</div>
+  <div id="record-screen" hidden><div id="record-canvas"></div><div class="rec-badge">● REC</div><div class="rec-meta"><span id="rec-elapsed">0.0 秒</span><span id="rec-instruction">空格或「停止」结束录像</span></div></div>
+</section>
+<aside>
+  <section><div class="section-heading"><h2>编辑对象</h2><span id="object-count"></span></div>
+    <label class="field">选择人物、道具或镜头<select id="object"></select></label>
+    <div class="mode-tabs" role="group" aria-label="编辑模式"><button data-mode="whole" class="active">整体</button><button data-mode="joint">关节</button><button data-mode="free">自由拆分</button></div>
+    <label class="field" id="part-field" hidden>选择部位<select id="part"></select></label>
+    <p id="mode-hint" class="hint">整体移动人物；手持物按绑定关系跟随。</p>
+  </section>
+  <section><div class="section-heading"><h2>位置与姿态</h2><label class="small-check"><input id="visible" type="checkbox" checked>显示</label></div>
+    <div class="tools"><button data-tool="translate" class="active">移动</button><button data-tool="rotate">旋转</button><select id="space" aria-label="坐标系"><option value="world">世界轴</option><option value="local">自身轴</option></select></div>
+    <label class="small-check"><input id="ground" type="checkbox" checked>人物锁定地面高度</label>
+    <div class="row-actions"><button id="undo">撤销</button><button id="redo">重做</button><button id="restore">恢复对象</button></div>
+    <button id="reconnect" hidden>回到关节连接</button>
+    <button id="unfix" hidden>取消固定</button>
+  </section>
+  <section id="binding-section" hidden><h2>道具绑定</h2><label class="field">跟随对象<select id="binding"></select></label><p class="hint">保持当前位置建立绑定；解除后可独立移动。</p></section>
+  <section id="components-section" hidden><div class="section-heading"><h2>复制组件</h2></div>
+    <div id="components" class="components"></div>
+  </section>
+  <section><h2>这个时间点的走位说明</h2><textarea id="note" rows="4" placeholder="例如：P02 从门口沿左墙绕过桌子，在这个时间点站到我设置的位置，再转身看主角。"></textarea>
+    <button id="bookmark" class="wide">保存这个时间点</button><div id="bookmarks" class="bookmarks"></div>
+    <p class="hint">点击“保存这个时间点”，或在走位说明里按回车（Shift+回车换行），即可保存。只有保存过的才加入 ZIP；未保存的修改在切换时间或播放时放弃，关闭前请下载修改包。</p>
+  </section>
+  <section><h2>原动画生成检查</h2><p class="hint">原始剧情动画在生成阶段检查全片碰撞。导演台自由编辑，拖动和保存不做碰撞检查。</p><button id="check-collisions" class="wide">检查原动画碰撞</button></section>
+  <div id="warnings" role="status"></div>
+</aside>
+</main>
+<footer>
+  <div class="timeline-controls"><button id="play" class="primary">播放原动画</button><button id="prev" aria-label="快退5秒">快退 5 秒</button><button id="next" aria-label="快进5秒">快进 5 秒</button><label><input id="seconds" type="number" min="0" step="0.033333"> 秒</label><select id="speed" aria-label="播放速度"><option value="0.5">0.5 倍</option><option value="1" selected>1 倍</option><option value="2">2 倍</option></select><span id="time-label"></span><span id="draft-label" class="pill">原状态</span></div>
+  <div class="timeline-row"><select id="scene" aria-label="跳转场景"></select><input id="timeline" type="range" min="0" step="1" value="0" aria-label="时间轴"><span id="duration-label"></span></div>
+</footer>
+<input id="file" type="file" accept=".zip,.json" hidden>
+<script type="module" src="director.js"></script>
+</body></html>

@@ -1,0 +1,67 @@
+:root{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;color:#e6e9ef;background:#161a21;color-scheme:dark;font-size:13px;--accent:#5b8cff;--border:#333a47}*{box-sizing:border-box}body{margin:0;height:100vh;display:flex;flex-direction:column;overflow:hidden}button,input,select,textarea{font:inherit}button,select,input,textarea{border:1px solid var(--border);border-radius:6px;background:#fff;color:inherit}button{padding:7px 11px;cursor:pointer}button:hover{background:#edf2fc;border-color:#a7bbeb}button:disabled{opacity:.45;cursor:default}.primary{background:var(--accent);color:white;border-color:var(--accent)}.primary:hover{background:#2b54b5}header{height:62px;flex-shrink:0;display:flex;align-items:center;justify-content:space-between;padding:0 22px;background:white;border-bottom:1px solid var(--border)}header>div{display:flex;align-items:center;gap:10px}header strong{font-size:17px}.brand-mark{font-size:26px;color:var(--accent)}.sub{color:#7a8799;font-size:12px;margin-left:8px}nav{display:flex;align-items:center;gap:8px}a{color:var(--accent);text-decoration:none;padding:6px}main{flex:1;display:grid;grid-template-columns:minmax(0,1fr) 318px;min-height:0}.stage{position:relative;background:#dce0e6;overflow:hidden}#viewport{position:absolute;inset:0}canvas{display:block}#viewport canvas{width:100%;height:100%;touch-action:none}.view-toolbar{position:absolute;top:15px;left:16px;display:flex;gap:4px;align-items:center;background:#ffffffed;padding:5px;border:1px solid #ffffffa6;border-radius:9px;box-shadow:0 3px 12px #28385015}.view-toolbar button{padding:6px 9px;border-color:transparent}.view-tag{font-size:12px;font-weight:600;padding:0 8px;color:#51627b}.view-options{position:absolute;top:65px;left:20px;display:flex;gap:13px;color:#4b5b70;font-size:12px;background:#ffffffd9;padding:6px 9px;border-radius:6px}.view-options label,.small-check{display:flex;align-items:center;gap:4px}input[type=checkbox]{accent-color:var(--accent)}.view-help{position:absolute;left:20px;bottom:18px;line-height:1.8;color:#435166;background:#ffffffc9;padding:7px 10px;border-radius:6px;font-size:11px}.preview{position:absolute;right:18px;bottom:18px;width:min(32%,360px);min-width:220px;border-radius:8px;overflow:hidden;background:#fff;box-shadow:0 4px 20px #27334130}.preview-title{display:flex;justify-content:space-between;align-items:center;padding:8px 10px;font-size:11px;font-weight:600}.preview-title span:last-child{color:#8a95a5;font-weight:400}#preview-canvas{width:100%;aspect-ratio:16/9;overflow:hidden}#preview-canvas canvas{width:100%;height:100%}#status{position:absolute;left:20px;bottom:80px;max-width:55%;background:#243246e8;color:white;padding:8px 12px;border-radius:7px;font-size:12px;pointer-events:none;opacity:0;transition:opacity .15s}#status.show{opacity:1}aside{background:white;border-left:1px solid var(--border);overflow:auto;padding:8px 17px 16px}aside section{padding:13px 0;border-bottom:1px solid #edf0f5}h2{font-size:13px;margin:0 0 10px;font-weight:650}.section-heading{display:flex;justify-content:space-between;align-items:baseline}.section-heading span{font-size:11px;color:#91a0b3}.field{display:block;color:#6a778b;font-size:11px;margin:0 0 10px}.field select{display:block;margin-top:5px;width:100%;padding:8px;color:#243246}.mode-tabs{display:flex;gap:4px}.mode-tabs button{flex:1;padding:7px 3px;font-size:12px}.active{background:#eaf0fe!important;color:#345cbc!important;border-color:#b5c8f0!important}.hint{font-size:11px;color:#8390a1;line-height:1.6;margin:8px 0 0}.tools{display:flex;gap:5px;margin-bottom:9px}.tools button{padding:6px 8px}.tools select{min-width:0;padding:4px;width:78px;margin-left:auto}.small-check{font-size:11px;color:#6d7a8d}.row-actions{display:flex;gap:6px;margin-top:12px}.row-actions button{flex:1;font-size:11px;padding:7px 4px}textarea{width:100%;resize:vertical;padding:9px;line-height:1.6;font-size:12px}.wide{width:100%;margin-top:7px}.bookmarks{display:flex;gap:5px;flex-wrap:wrap;margin-top:9px}.bookmark{display:flex;border:1px solid var(--border);border-radius:6px;overflow:hidden}.bookmark button{font-size:11px;border:0;border-radius:0;padding:5px 6px}.bookmark .delete{color:#9a6e71;padding:5px}#warnings{margin-top:9px;color:#976123;font-size:11px;line-height:1.7;background:#fff5e6;border-radius:6px}#warnings:not(:empty){padding:9px}footer{padding:12px 20px;background:white;border-top:1px solid var(--border);flex-shrink:0}.timeline-controls{display:flex;align-items:center;gap:8px}.timeline-controls button{font-size:12px}.timeline-controls input{width:90px;padding:7px}.timeline-controls select{padding:7px}.timeline-controls label{font-size:12px;color:#79869a}#time-label{font-variant-numeric:tabular-nums;margin-left:8px;color:#68778e;font-size:12px}.pill{font-size:11px;padding:4px 8px;border-radius:20px;background:#eff2f6;color:#6c7a8e;margin-left:auto}.pill.edited{background:#eaf0fe;color:var(--accent)}.timeline-row{display:flex;align-items:center;gap:12px;margin-top:10px}.timeline-row select{max-width:250px;width:240px;padding:7px;font-size:12px}.timeline-row input{flex:1;accent-color:var(--accent)}.timeline-row>span{color:#93a0b1;font-size:11px;white-space:nowrap}[hidden]{display:none!important}@media(max-width:1000px){.sub{display:none}main{grid-template-columns:minmax(0,1fr) 280px}header{padding:0 14px}.view-options{gap:6px;font-size:10px}.preview{right:12px;width:240px;min-width:0}.view-toolbar button{padding:5px 6px}.view-help{font-size:10px;max-width:45%}}@media(max-width:700px){body{height:auto;min-height:100vh;overflow:auto}header{height:auto;min-height:62px;gap:10px;flex-wrap:wrap;padding:12px}main{display:flex;flex-direction:column}.stage{height:55vh;min-height:360px}aside{border-left:0;max-height:none}footer{position:sticky;bottom:0;padding:10px}.timeline-controls{flex-wrap:wrap}.timeline-row select{width:150px}.preview{width:170px;bottom:12px}.view-help{display:none}.view-options{flex-wrap:wrap;right:12px}.view-toolbar{left:8px;right:8px;gap:0}.view-tag{padding:0 4px;font-size:10px}.view-toolbar button{font-size:11px}.pill{margin-left:0}#time-label{font-size:11px;margin:0}}
+body.exporting main,body.exporting footer,body.exporting #import{pointer-events:none}
+/* 暗色主题：深色面板 + 亮灰文字；三维画面（白模）与导出 PNG 保持不变 */
+button,select,input,textarea{background:#2b313c;color:#e6e9ef}
+button:hover{background:#353d4b;border-color:#4a566a}
+.primary:hover{background:#4c78e6}
+header,footer{background:#21262f}
+.sub{color:#94a0b2}
+.stage{background:#12151b}
+.view-toolbar{background:#1f242ceb;border-color:#2c333f;box-shadow:0 3px 12px #00000059}
+.view-options{color:#c2cadb;background:#1f242cd9}
+.view-help{color:#aeb7c6;background:#1f242cc9}
+.preview{background:#21262f;box-shadow:0 4px 20px #00000073}
+#status{background:#0e1116e8}
+aside{background:#1c2028}
+aside section{border-bottom-color:#262c36}
+.field,.hint,.small-check,.section-heading span,.timeline-controls label,#time-label,.timeline-row>span{color:#8b96a8}
+.field select{color:#e6e9ef}
+.active{background:#26324d!important;color:#8fb0ff!important;border-color:#3c4d74!important}
+#warnings{color:#e2b06a;background:#3a2f1c}
+.pill{background:#2a303a;color:#a8b2c2}
+.pill.edited{background:#26324d;color:#8fb0ff}
+.bookmark .delete{color:#d99a9f}
+a{color:#8fb0ff}
+.components{display:flex;flex-direction:column;gap:6px;margin-top:9px}
+.components .hint{margin:0}
+.component-row{display:flex;gap:6px;align-items:center;border:1px solid var(--border);border-radius:6px;padding:5px}
+.component-row>button:first-child{flex:1.4;min-width:0;text-align:left;font-size:11px;padding:5px 7px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.component-row input{flex:1;min-width:0;font-size:11px;padding:5px 7px}
+.component-row .delete{flex:none;color:#d99a9f;padding:5px 8px;border:0;background:transparent}
+/* 录制：点「录制」后大视图整块换成录制画面，右下小预览显示录制进度 */
+#record.rec-active,#record-observer.rec-active,#play.rec-active{background:#c0392b;border-color:#c0392b;color:#fff}
+#record.rec-active:hover,#record-observer.rec-active:hover,#play.rec-active:hover{background:#a93226;border-color:#a93226}
+body.recording main,body.recording footer,body.recording #import,body.recording #export,body.recording nav a{pointer-events:none}
+/* 录制期间「暂停」键承担「停止」功能，仍要可点。 */
+body.recording footer #play{pointer-events:auto}
+#status{z-index:6}
+#record-screen{position:absolute;inset:0;z-index:5;background:#0b0d11}
+#record-canvas{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+#record-canvas canvas{max-width:100%;max-height:100%}
+.rec-badge{position:absolute;top:14px;left:16px;background:#c0392b;color:#fff;font-size:12px;font-weight:600;padding:4px 10px;border-radius:20px;letter-spacing:.5px}
+.rec-meta{position:absolute;bottom:14px;left:16px;display:flex;gap:12px;align-items:center;color:#e6e9ef;font-size:12px;background:#000000a6;padding:5px 10px;border-radius:6px}
+#rec-elapsed{font-variant-numeric:tabular-nums;font-weight:600}
+#rec-progress{position:absolute;left:0;right:0;bottom:0;display:flex;align-items:center;gap:8px;padding:6px 8px;background:#000000b8}
+#rec-progress .rec-bar{flex:1;height:4px;background:#3a4354;border-radius:3px;overflow:hidden}
+#rec-progress .rec-bar i{display:block;height:100%;width:0;background:var(--accent)}
+#rec-progress span{font-size:11px;color:#c2cadb;white-space:nowrap}
+/* 镜头控制设置：普通模式与第三人称录制中均可使用 */
+.camera-hud{position:absolute;left:12px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;align-items:center;gap:9px;z-index:6}
+.camera-toggle{width:34px;height:34px;padding:0;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;line-height:1;background:#6b7382;border:1px solid #4a5361;color:#e6e9ef;box-shadow:0 3px 12px #00000059;cursor:pointer}
+.camera-toggle:hover{background:#7d8697;border-color:#5b6575}
+.camera-toggle[aria-expanded=true]{background:#8fb0ff;border-color:#8fb0ff;color:#1c2028}
+.camera-panel{position:absolute;left:calc(100% + 10px);top:0;width:304px;max-width:calc(100vw - 66px);display:flex;flex-direction:column;gap:9px;background:#1f242ceb;border:1px solid #2c333f;border-radius:9px;padding:11px 12px;box-shadow:0 3px 12px #00000059;color:#c2cadb}
+.camera-panel-title{font-size:11px;font-weight:600;color:#8b96a8;letter-spacing:1px}
+.camera-setting{display:grid;grid-template-columns:80px minmax(50px,1fr) 76px;align-items:center;gap:8px;font-size:11px;color:#aeb7c6}
+.camera-setting input[type=range]{width:100%;accent-color:var(--accent);cursor:pointer;margin:0}
+.camera-setting-value{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:10px}
+.camera-setting-value input{width:76px;padding:4px;text-align:right;font-variant-numeric:tabular-nums}
+#camera-settings-reset{align-self:flex-end;font-size:11px;padding:5px 9px}
+body.recording-observer #viewport,body.recording-observer .camera-hud{pointer-events:auto}
+body.recording-observer #record-screen{background:transparent;pointer-events:none}
+body.recording-observer #record-canvas{display:none}
+body.recording-observer #record-screen .rec-badge{top:14px}
+body.recording-observer #record-screen .rec-meta{bottom:14px}
+body.recording-observer .view-toolbar,body.recording-observer .view-options,body.recording-observer .view-help{visibility:hidden}
+.components:empty{display:none}
+@media(max-width:1000px){header strong{font-size:15px}nav{gap:4px}nav button{padding:7px 8px;font-size:12px}}

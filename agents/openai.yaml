@@ -1,0 +1,4 @@
+interface:
+  display_name: "白模视频导演"
+  short_description: "从剧情规划白模视频，生成导演台、启动入口和完整 MP4"
+  default_prompt: "使用 $white-model-director，根据我的剧情描述规划并生成白模预演视频和可编辑导演台。"
