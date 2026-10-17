@@ -27,9 +27,8 @@
   <section><div class="section-heading"><h2>位置与姿态</h2><label class="small-check"><input id="visible" type="checkbox" checked>显示</label></div>
     <div class="tools"><button data-tool="translate" class="active">移动</button><button data-tool="rotate">旋转</button><select id="space" aria-label="坐标系"><option value="world">世界轴</option><option value="local">自身轴</option></select></div>
     <label class="small-check"><input id="ground" type="checkbox" checked>人物锁定地面高度</label>
-    <div class="row-actions"><button id="undo">撤销</button><button id="redo">重做</button><button id="restore">恢复对象</button></div>
+    <div class="row-actions"><button id="undo">撤销</button><button id="redo">重做</button><button id="restore">恢复对象</button><button id="unfix" hidden>取消固定</button></div>
     <button id="reconnect" hidden>回到关节连接</button>
-    <button id="unfix" hidden>取消固定</button>
   </section>
   <section id="binding-section" hidden><h2>道具绑定</h2><label class="field">跟随对象<select id="binding"></select></label><p class="hint">保持当前位置建立绑定；解除后可独立移动。</p></section>
   <section id="components-section" hidden><div class="section-heading"><h2>复制组件</h2></div>

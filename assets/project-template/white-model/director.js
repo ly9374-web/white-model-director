@@ -218,10 +218,11 @@ function syncBookmarks(){
  });
 }
 function selectedEntry(){return model.isDeleted(selected)?undefined:model.registry.get(selected);}
+function defaultPart(id){const head=id+'/head';return !model.isDeleted(head)?head:[...model.registry.values()].find(e=>e.actorId===id&&e.kind==='joint'&&!model.isDeleted(e.id))?.id||id;}
 function refreshParts(rootId){const part=$('part');part.replaceChildren();for(const e of model.registry.values())if(e.actorId===rootId&&e.id!==rootId&&!model.isDeleted(e.id)){const o=document.createElement('option');o.value=e.id;o.textContent=e.label;part.append(o);}if(selected.startsWith(rootId+'/'))part.value=selected;}
 function select(id){if(!model.registry.has(id)||model.isDeleted(id))return;pause();selected=id;
  focusViewId=null;
- const e=selectedEntry();$('object').value=e.actorId||id;refreshParts(e.actorId);if(e.actorId&&mode!=='whole'&&e.kind==='actor'){selected=`${e.actorId}/head`;$('part').value=selected;}
+ const e=selectedEntry();$('object').value=e.actorId||id;refreshParts(e.actorId);if(e.actorId&&mode!=='whole'&&e.kind==='actor'){selected=defaultPart(e.actorId);$('part').value=selected;}
  attach();sync();render();}
 // 没有任何显式选择时，默认落到第一个可编辑对象（新生成场景按 reference.md 规划出的对象顺序决定）。
 function selectDefault(){const e=mainEntries.find(x=>x.kind!=='camera')||mainEntries[0];if(e)select(e.id);}
@@ -232,7 +233,7 @@ function attach(){const e=selectedEntry();if(!e){controls.detach();return;}
  document.querySelectorAll('[data-tool]').forEach(b=>b.classList.toggle('active',b.dataset.tool===tool));
 }
 function setMode(next){pause();mode=next;const e=selectedEntry();
- if(e&&e.actorId){selected=next==='whole'?e.actorId:(e.kind==='actor'?`${e.actorId}/head`:selected);}
+ if(e&&e.actorId){selected=next==='whole'?e.actorId:(e.kind==='actor'?defaultPart(e.actorId):selected);}
  document.querySelectorAll('[data-mode]').forEach(b=>b.classList.toggle('active',b.dataset.mode===mode));const cur=selectedEntry();if(cur)refreshParts(cur.actorId);attach();sync();render();}
 function sync(){syncBookmarks();syncComponents();const e=selectedEntry();if(!e)return;const scene=sceneAt(model.time);
  $('play').textContent=playing?'暂停并编辑':'播放原动画';$('timeline').value=model.frame;$('seconds').value=model.time.toFixed(3);$('scene').value=scene.id;
@@ -242,7 +243,11 @@ function sync(){syncBookmarks();syncComponents();const e=selectedEntry();if(!e)r
  $('part-field').hidden=mode==='whole'||!e.actorId;$('part').disabled=playing;$('visible').checked=e.node.visible;
  $('note').disabled=playing;
  $('binding-section').hidden=e.kind!=='prop';$('binding').value=model.bindings[selected]?.owner||'';
- $('reconnect').hidden=!model.edits.free[selected];$('unfix').hidden=!model.overrides[selected];$('undo').disabled=!model.undoStack.length||playing;$('redo').disabled=!model.redoStack.length||playing;
+ $('reconnect').hidden=!model.edits.free[selected];
+ // 取消固定：静态道具被拖动后会自动固定到片尾。选中可固定的道具时始终显示此按钮，未固定则置灰，避免找不到解除入口。
+ const canCancel=!!model.overrides[selected],canFix=e.kind==='prop'||!!model.components[selected];
+ $('unfix').hidden=!(canCancel||canFix);$('unfix').disabled=!canCancel;$('unfix').title=canCancel?'取消该道具的固定，恢复到原动画位置':'该道具尚未固定；在某帧拖动它就会自动固定并保持到片尾';
+ $('undo').disabled=!model.undoStack.length||playing;$('redo').disabled=!model.redoStack.length||playing;
  $('mode-hint').textContent=mode==='whole'?'整体移动人物；主角身体、前景手部、剧情镜头彼此独立。':mode==='joint'?'转动关节保持连接；选择手部目标可拖动摆姿势。':'高级模式：部位可独立平移并离开身体，支持回到关节连接。';
  $('warnings').textContent=model.warnings(selected).join(' ');}
 let mainEntries=[];
@@ -444,7 +449,7 @@ async function exportBundle(){
   const json=strToU8(JSON.stringify(data,null,2));
   if(states.length>500||json.length>128*1024*1024)throw new Error('目标时间点过多，请移除部分书签后再分批下载。');
   files['states.json']=json;
-  files['交给我的说明.md']=strToU8('# 白膜目标状态修改包\n\n把整个 ZIP 上传到聊天，或放进项目文件夹并提供路径。\n\n告诉我：需要修改哪些 S / P / O 编号，人物从哪里开始、如何绕行、何时到达、最后朝向哪里，以及需要保留哪些部分。每个时间点的提示词也已写在对应目录中。\n\n这些是自由编辑的目标状态，不是已经重写的连续动画。导演台不检查碰撞；将目标改写为 Three.js 原始剧情动画时，需要在生成验收阶段检查完整动画。states.json 中包含工程版本、原状态、目标状态、关节、绑定、镜头和坐标。需要同一版本工程恢复；不包含三维模型和依赖。\n\n原本不走位、也不随人物移动的道具被移动后，会自动固定位置：states.json 的 overrides 记录每个道具的起始帧与变换，从该帧起保持到片尾，不会再闪回原位。绑定或随人物移动的道具（如手持物）不固定。\n\n剧情镜头 C01 与前景手部彼此独立，人物身体与其定位身体也各自独立。\n\n如果复制/粘贴过组件：states.json 的顶层 components 记录每个副本的来源、编号、世界矩阵与备注，副本不带原动效；复制记录.md 逐条说明“复制了什么、粘贴在哪里、编号是什么、备注是什么”。导入时会按这些记录还原副本。\n');
+  files['交给我的说明.md']=strToU8('# 白膜目标状态修改包\n\n## 固定修改指令\n\n当我将这个文件给你之后规划一下怎么修改，规划完成后我需要你问我一轮，是否有什么我的指令模糊或者互相冲突让我澄清一下，澄清后再改\n\n## 修改包使用说明\n\n把整个 ZIP 上传到聊天，或放进项目文件夹并提供路径。\n\n告诉我：需要修改哪些 S / P / O 编号，人物从哪里开始、如何绕行、何时到达、最后朝向哪里，以及需要保留哪些部分。每个时间点的提示词也已写在对应目录中。\n\n这些是自由编辑的目标状态，不是已经重写的连续动画。导演台不检查碰撞；将目标改写为 Three.js 原始剧情动画时，需要在生成验收阶段检查完整动画。states.json 中包含工程版本、原状态、目标状态、关节、绑定、镜头和坐标。需要同一版本工程恢复；不包含三维模型和依赖。\n\n原本不走位、也不随人物移动的道具被移动后，会自动固定位置：states.json 的 overrides 记录每个道具的起始帧与变换，从该帧起保持到片尾，不会再闪回原位。绑定或随人物移动的道具（如手持物）不固定。\n\n剧情镜头 C01 与前景手部彼此独立，人物身体与其定位身体也各自独立。\n\n如果复制/粘贴过组件：states.json 的顶层 components 记录每个副本的来源、编号、世界矩阵与备注，副本不带原动效；复制记录.md 逐条说明“复制了什么、粘贴在哪里、编号是什么、备注是什么”。导入时会按这些记录还原副本。\n');
   const bytes=zipSync(files,{level:6});if(bytes.length>128*1024*1024)throw new Error('修改包过大，请分批保存目标时间点。');return {bytes,data};
  }finally{renderer.dispose();model.time=current.time;model.edits=current.edits;model.overrides=current.overrides;model.undoStack=current.undo;model.redoStack=current.redo;model.evaluate();restoreView(current.view);selected=current.selected;attach();sync();render();}
 }
@@ -607,7 +612,7 @@ $('record-observer').addEventListener('click',()=>{if(recording)stopRecording();
 
 window.__director={ready:true,seek,select,setMode,edit:(id,values,options)=>{pause();model.edit(id,values,options);if(model.collisionMessage)notify(model.collisionMessage,true);sync();render();},
  bind:(id,owner)=>{pause();model.setBinding(id,owner);sync();render();},collisions:()=>model.collisionContacts(),pose:id=>model.pose(model.registry.get(id).node),state:()=>model.state(viewState()),
- bookmark:saveBookmark,undo:()=>applyHistory(()=>model.undo()),redo:()=>applyHistory(()=>model.redo()),,exportBundle,
+ bookmark:saveBookmark,undo:()=>applyHistory(()=>model.undo()),redo:()=>applyHistory(()=>model.redo()),exportBundle,
  recording:()=>recording,startRecording,stopRecording,
  cameraProbe:()=>({...captureObserver(),roll:cameraRoll,target:orbit.target.toArray(),speeds:{...cameraSpeeds}}),
  recordingProbe:()=>({recording,encoding,mode:recordingMode,sampleCount:recordSamples.length}),
